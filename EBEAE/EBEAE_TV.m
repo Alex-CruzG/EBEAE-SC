@@ -70,7 +70,6 @@ function [P,A,Wm,Yh]=EBEAE_TV(Yo,n,parameters,sc,Po,oae)
     lambda=0;
     epsilon=1e-3;
     maxiter=20;
-%     downsampling=0.5;
     parallel=0;
     normalization=1;
     display=0;
@@ -128,11 +127,6 @@ function [P,A,Wm,Yh]=EBEAE_TV(Yo,n,parameters,sc,Po,oae)
                 disp('The default value is considered!');
                 maxiter=20;
             end
-%             if downsampling<0 && downsampling>1
-%                 disp('The downsampling factor cannot be negative or >1');
-%                 disp('The default value is considered!');
-%                 downsampling=0.5;
-%             end
             if parallel~=0 && parallel~=1
                 disp('The parallelization parameter is 0 or 1');
                 disp('The default value is considered!');
@@ -162,15 +156,15 @@ function [P,A,Wm,Yh]=EBEAE_TV(Yo,n,parameters,sc,Po,oae)
             sc=[];
         else
             if ~(sc(1)>=0 && sc(1)<=1)
-                disp('The parameter lambda must be <=1');
+                disp('The parameter mu must be <=1');
                 sc(1)=1;
             end
             if ~(sc(2)>=0 && sc(2)<=1)
-                disp('The parameter lambda must be <1');
+                disp('The parameter nu must be <=1');
                 sc(2)=1;
             end
             if ~(sc(3)>=0 && sc(3)<=1)
-                disp('The parameter lambda must be <1');
+                disp('The parameter tau must be <=1');
                 sc(3)=1;
             end
             if (sc(4)*sc(5) ~= size(Yo,2))
