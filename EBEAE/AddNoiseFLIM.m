@@ -6,7 +6,7 @@ function [Y] = AddNoiseFLIM(Y0,SNR,PSNR)
     % Function to add a certain level of Gaussian noise and Shot noise in decibels
     %
     % Input Arguments
-    %   Yo  = matrix of measurements (MxN)
+    %   Yo  = matrix of measurements
     %   SNR = Gaussian noise level 
     %   PSNR= Shot noise level
     %
