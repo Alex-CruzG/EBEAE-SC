@@ -163,12 +163,15 @@ function [P,A,Wm,Yh]=EBEAE_TV(Yo,n,parameters,sc,Po,oae)
         else
             if ~(sc(1)>=0 && sc(1)<=1)
                 disp('The parameter lambda must be <=1');
+                sc(1)=1;
             end
-            if ~(sc(2)>=0 && sc(2)<1)
+            if ~(sc(2)>=0 && sc(2)<=1)
                 disp('The parameter lambda must be <1');
+                sc(2)=1;
             end
-            if ~(sc(3)>=0 && sc(3)<1)
+            if ~(sc(3)>=0 && sc(3)<=1)
                 disp('The parameter lambda must be <1');
+                sc(3)=1;
             end
             if (sc(4)*sc(5) ~= size(Yo,2))
                 disp('The spatial dimensions do not match the number of measurements in the Y matrix');
