@@ -3,7 +3,9 @@
 % Synthetic Evaluation of EBEAE with VNIR Hyperspecytal Dataset
 %
 % VNIR --> Visible and Near-Infrared
-% April/2020
+%
+% Ines A. Cruz-Guerrero
+% May/2021
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 clear all; clc; close all;
@@ -18,8 +20,8 @@ addpath('GraphL');
 
 N=3;                % Number of Simulated End-members only n=2,3,4
 Nsamples=120;       % Size of the Squared Image Nsamples x Nsamples 
-SNR=50;             % Level in dB of Gaussian Noise SNR=45,50,55
-PSNR=40;            % Level in dB of Shot Noise PSNR=15,20,25
+SNR=35;             % Level in dB of Gaussian Noise SNR=45,50,55
+PSNR=10;            % Level in dB of Shot Noise PSNR=15,20,25
 [Y,Po,Ao]=VNIRsynth(N,Nsamples,SNR,PSNR);   % Synthetic VNIR Dataset
 [L,K]=size(Y);
 MHSI=reshape(Y',Nsamples,Nsamples,L);
@@ -47,10 +49,9 @@ end
 hold on;
 
 %%
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Execute EBEAE Methodology
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Execute GLNMF Methodology
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 disp('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%');
 disp('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%');
@@ -68,6 +69,10 @@ para_nmf.mu = 0.1;
 tic;
 [iter, P1, A1]= glnmf(Y, N, Pini, Aini, para_nmf);
 T_m1 = toc;
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Plot Estimated Abundances and End-members
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 [A1, P1, ~, ~] = find_perm(Ao,Po, A1, P1);
 
@@ -88,6 +93,9 @@ title('B) GLNMF Estimation');
 legend('Endmember 1','Endmember 2','Endmember 3'); hold on;
 
 %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Execute PISINMF Methodology
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 disp('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%');
 disp('PISINMF');
 
@@ -104,6 +112,11 @@ para.alpha=0.001;
 tic
 [P3,A3] =  PISINMF(Y,N,para);
 T_m3=toc;
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Plot Estimated Abundances and End-members
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 [A3, P3, ~, ~] = find_perm(Ao,Po, A3, P3);
 
 figure(1);
@@ -129,7 +142,9 @@ end
 % Execute EBEAE with HTV IACG
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Execute NMF-QMV Methodology
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 disp('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%');
 disp('NMF-QMV with Total variation');
 
@@ -165,14 +180,17 @@ for i=1:N
 end
 
 %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Execute EBEAE-TV Methodology
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 disp('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%');
-disp('EBEAE-TV with Total variation');
+disp('EBEAE-TV');
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Define Paremeters of EBEAE
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 initcond=2;
-rho=1;
+rho=2;
 lambda=0.3;
 epsilon=1e-3;
 maxiter=20;
@@ -187,6 +205,11 @@ paramvec=[initcond,rho,lambda,epsilon,maxiter,parallel,normalization,disp_iter];
 tic;
 [P5,A,A5,Yh6]=EBEAE_TV(Y,N,paramvec,sc);
 T_m5=toc;
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Plot Estimated Abundances and End-members
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 [A5, P5, nmse_a, nmse_p] = find_perm(Ao,Po, A5, P5);
 
 figure(1);
@@ -207,11 +230,14 @@ for i=1:N
     end
 end
 
+%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Compute Estimation Errors on Abundances and End-members, and Execution
 % Time
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+disp('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%');
+disp('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%');
+disp('Average errors');
 Er_p1=[];
 Er_a1=[];
 Er_p3=[];
@@ -253,9 +279,8 @@ disp(['PISINMF Estimation Error in Abundances=' num2str(mean(Er_a3))]);
 disp(['NMF-QMV Estimation Error in Abundances=' num2str(mean(Er_a4))]);
 disp(['EBEAE-TV Estimation Error in Abundances=' num2str(mean(Er_a5))]);
 % 
-disp('%%%%%%%%%%%%%%%%%%%');
-disp('%%%%%%%%%%%%%%%%%%%');
-disp('%%%%%%%%%%%%%%%%%%%');
+disp('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%');
+disp('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%');
 disp('Distance from a point to a set');
 Er_p1=[];
 Er_a1=[];
