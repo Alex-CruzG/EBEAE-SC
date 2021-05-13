@@ -29,7 +29,7 @@ function [G,A] =  PISINMF(X,m,para)
 %       Sensors (Switzerland), vol. 18, no. 10, 2018.
 %
 % Ines A. Cruz-Guerrero
-% Mayo/2021
+% May/2021
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
