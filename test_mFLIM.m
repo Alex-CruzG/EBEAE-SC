@@ -1,6 +1,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-% Synthetic Evaluation of EBEAE-TV with m-FLIM Hyperspecytal Dataset
+% Synthetic Evaluation of EBEAE-TV with m-FLIM Hyperspectral Dataset
 %
 % m-FLIM -->  microscopic  Fluorescence  Lifetime  Imagin
 %
