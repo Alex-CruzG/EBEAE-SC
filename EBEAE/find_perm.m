@@ -18,7 +18,7 @@ function [A_hat, P_hat, nmse_a, nmse_p] = find_perm(A_true,P_true, A_hat, P_hat)
     %   nmse_p  = Error mse of end-members
     %
     % Ines A. Cruz-Guerrero
-    % Mayo/2021
+    % May/2021
     %
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
