@@ -55,7 +55,7 @@ function [P,A,Wm,Yh]=EBEAE_TV(Yo,n,parameters,sc,Po,oae)
     %   Yh = estimated matrix of measurements (MxN)
     %
     % Ines A. Cruz-Guerrero
-    % Mayo/2021
+    % May/2021
     %
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -429,7 +429,7 @@ function A = abundanceSC(Y,P,W,parallel, mu)
     %   A           = abundance matrix (nxN)
     %
     % Ines A. Cruz-Guerrero
-    % Mayo/2021
+    % May/2021
     %
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -821,7 +821,7 @@ function dW=denoise_abundance(A,mu,nu,tau,m,n,maxiter)
     %   dW      = noise-free abundance matrix (nxN)
     %
     % Ines A. Cruz-Guerrero
-    % Mayo/2021
+    % May/2021
     %
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
