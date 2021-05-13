@@ -1,6 +1,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-% Synthetic Evaluation of EBEAE-TV with VNIR Hyperspecytal Dataset
+% Synthetic Evaluation of EBEAE-TV with VNIR Hyperspectral Dataset
 %
 % VNIR --> Visible and Near-Infrared
 %
