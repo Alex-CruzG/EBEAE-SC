@@ -14,7 +14,7 @@ function [Y] = AddNoiseFLIM(Y0,SNR,PSNR)
     %   Y   = matrix of measurements with noise
     %
     % Ines A. Cruz-Guerrero
-    % Mayo/2021
+    % May/2021
     %
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
