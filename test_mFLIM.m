@@ -215,7 +215,7 @@ plot(P5,'LineWidth',2); grid on;
 axis([0 560 0 max(max(normalize(Po,'norm',1)))]);
 xlabel('Time Samples');
 ylabel('Normalized Intensity');
-title('F) EBEAE-STV Estimation');
+title('E) EBEAE-STV Estimation');
 legend('Endmember 1','Endmember 2','Endmember 3','Endmember 4'); hold on;
 
 figure(2);
