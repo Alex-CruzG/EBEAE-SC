@@ -24,6 +24,8 @@ SNR=35;             % Level in dB of Gaussian Noise SNR=45,50,55
 PSNR=10;            % Level in dB of Shot Noise PSNR=15,20,25
 [Y,Po,Ao]=VNIRsynth(N,Nsamples,SNR,PSNR);   % Synthetic VNIR Dataset
 [L,K]=size(Y);
+Po=normalize(Po,'norm',1);
+Ao=normalize(Ao,'norm',1);
 MHSI=reshape(Y',Nsamples,Nsamples,L);
 bands=linspace(450,950,L);
 
@@ -74,6 +76,8 @@ T_m1 = toc;
 % Plot Estimated Abundances and End-members
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+P1=normalize(P1,'norm',1);
+A1=normalize(A1,'norm',1);
 [A1, P1, ~, ~] = find_perm(Ao,Po, A1, P1);
 
 figure(2)
@@ -117,6 +121,8 @@ T_m3=toc;
 % Plot Estimated Abundances and End-members
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+P3=normalize(P3,'norm',1);
+A3=normalize(A3,'norm',1);
 [A3, P3, ~, ~] = find_perm(Ao,Po, A3, P3);
 
 figure(1);
@@ -155,6 +161,8 @@ T_m4=toc;
 % Plot Estimated Abundances and End-members
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+P4=normalize(P4,'norm',1);
+A4=normalize(A4,'norm',1);
 [A4, P4, ~, ~] = find_perm(Ao,Po, A4, P4);
 
 figure(1);
