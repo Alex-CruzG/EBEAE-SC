@@ -29,8 +29,8 @@ PSNR=10;            % Level in dB of Shot Noise PSNR=15,20,25
 load samson_1.mat
 load end3.mat
 
-Ao=A;
-Po=M./sum(M);
+Po=normalize(M,'norm',1);
+Ao=normalize(A,'norm',1);
 Xim = reshape(Ao',nRow,nCol,N);
 rows=nRow;
 columns=nCol;
@@ -94,6 +94,8 @@ T_m1 = toc;
 % Plot Estimated Abundances and End-members
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+P1=normalize(P1,'norm',1);
+A1=normalize(A1,'norm',1);
 [A1, P1, ~, ~] = find_perm(Ao,Po, A1, P1);
 
 figure(1);
@@ -137,6 +139,8 @@ T_m3=toc;
 % Plot Estimated Abundances and End-members
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+P3=normalize(P3,'norm',1);
+A3=normalize(A3,'norm',1);
 [A3, P3, ~, ~] = find_perm(Ao,Po, A3, P3);
 
 figure(1);
@@ -176,6 +180,8 @@ T_m4=toc;
 % Plot Estimated Abundances and End-members
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+P4=normalize(P4,'norm',1);
+A4=normalize(A4,'norm',1);
 [A4, P4, ~, ~] = find_perm(Ao,Po, A4, P4);
 
 figure(1);
