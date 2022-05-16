@@ -70,6 +70,7 @@ function [P,A,Wm,Yh]=EBEAE_TV(Yo,n,parameters,sc,Po,oae)
     lambda=0;
     epsilon=1e-3;
     maxiter=20;
+%     downsampling=0.5;
     parallel=0;
     normalization=1;
     display=0;
@@ -127,6 +128,11 @@ function [P,A,Wm,Yh]=EBEAE_TV(Yo,n,parameters,sc,Po,oae)
                 disp('The default value is considered!');
                 maxiter=20;
             end
+%             if downsampling<0 && downsampling>1
+%                 disp('The downsampling factor cannot be negative or >1');
+%                 disp('The default value is considered!');
+%                 downsampling=0.5;
+%             end
             if parallel~=0 && parallel~=1
                 disp('The parallelization parameter is 0 or 1');
                 disp('The default value is considered!');
@@ -156,15 +162,15 @@ function [P,A,Wm,Yh]=EBEAE_TV(Yo,n,parameters,sc,Po,oae)
             sc=[];
         else
             if ~(sc(1)>=0 && sc(1)<=1)
-                disp('The parameter mu must be <=1');
+                disp('The parameter lambda must be <=1');
                 sc(1)=1;
             end
             if ~(sc(2)>=0 && sc(2)<=1)
-                disp('The parameter nu must be <=1');
+                disp('The parameter lambda must be <1');
                 sc(2)=1;
             end
             if ~(sc(3)>=0 && sc(3)<=1)
-                disp('The parameter tau must be <=1');
+                disp('The parameter lambda must be <1');
                 sc(3)=1;
             end
             if (sc(4)*sc(5) ~= size(Yo,2))
@@ -346,7 +352,7 @@ function [P,A,Wm,Yh]=EBEAE_TV(Yo,n,parameters,sc,Po,oae)
                 P = endmember(Ym,Am,rho,normalization);
             end
             Jp=J;
-            W=denoise_abundance(Am,sc(1),sc(2),sc(3),sc(4),sc(5),10);   W=normalize(W,'norm',1);
+            W=denoise_abundance(Am,sc(1),sc(2),sc(3),sc(4),sc(5),20);   W=normalize(W,'norm',1);
             J=norm(Ym-P*Am,'fro');
             if J > Jp
                 P=Pp; break;
@@ -359,7 +365,7 @@ function [P,A,Wm,Yh]=EBEAE_TV(Yo,n,parameters,sc,Po,oae)
         end
         if NUMERROR==0
             Am = abundanceSC(Ymo,P,W,parallel,sc(1));
-            W=denoise_abundance(Am,sc(1),sc(2),sc(3),sc(4),sc(5),10);   W=normalize(W,'norm',1);
+            W=denoise_abundance(Am,sc(1),sc(2),sc(3),sc(4),sc(5),20);   W=normalize(W,'norm',1);
             ElapTime=toc;
             if display ==1
                 disp(['Elapsep Time =' num2str(ElapTime)]);
@@ -429,7 +435,7 @@ function A = abundanceSC(Y,P,W,parallel, mu)
     %   A           = abundance matrix (nxN)
     %
     % Ines A. Cruz-Guerrero
-    % May/2021
+    % Mayo/2021
     %
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -821,7 +827,7 @@ function dW=denoise_abundance(A,mu,nu,tau,m,n,maxiter)
     %   dW      = noise-free abundance matrix (nxN)
     %
     % Ines A. Cruz-Guerrero
-    % May/2021
+    % Mayo/2021
     %
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
@@ -842,12 +848,13 @@ function dW=denoise_abundance(A,mu,nu,tau,m,n,maxiter)
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     Dh=spdiags([-ones(n,1) ones(n,1)],[0 1],n,n);   Dh(n,:) = 0;    Dh = kron(Dh,speye(m));
     Dv=spdiags([-ones(m,1) ones(m,1)],[0 1],m,m);   Dv(m,:) = 0;    Dv = kron(speye(n),Dv);
-    
+    Jp=1e-8;
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % Start computation of noise-free abundance
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    for i=1:maxiter
-        for j=1:dim
+    Wp=W;
+    for j=1:dim
+        for i=1:maxiter
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             % Least squares stage
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -865,6 +872,13 @@ function dW=denoise_abundance(A,mu,nu,tau,m,n,maxiter)
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             b1=b1+Dh*W(:,j)-p;
             b2=b2+Dv*W(:,j)-q;
+            
+            J=norm(Wp(:,j)-W(:,j),'fro');
+            if abs(J-Jp)/Jp<1e-2
+                break;
+            end
+            Jp=J;
+            Wp(:,j)=W(:,j);
         end
     end
     W(W<0)=0;
